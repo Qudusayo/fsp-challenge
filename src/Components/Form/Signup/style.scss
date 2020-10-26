@@ -2,12 +2,27 @@ $orange: #FF5722;
 
 .Form {
     form {
+        position: relative;
         width: 85%;
         box-shadow: 0 4px 8px 0 rgba(53, 105, 128, 0.3),
             0 6px 20px 0 rgba(165, 200, 213, 0.41);
         padding: 1em;
         margin: 1em auto;
         border-radius: 7px;
+
+        img{
+            position: absolute;
+            z-index: -1;
+            opacity: .2;
+            width: 80%;
+            display: block;
+            margin-left: 10%;
+            top: 30%;
+        }
+
+        h1{
+            text-align: center;
+        }
 
         h2 {
             font-weight: 400;

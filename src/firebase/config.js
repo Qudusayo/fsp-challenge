@@ -1,7 +1,3 @@
-import firebase from "firebase";
-import "firebase/auth";
-import "firebase/app";
-
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_APP_API_KEY,
     authDomain: process.env.FIREBASE_APP_AUTHDOMAIN,
@@ -13,10 +9,4 @@ const firebaseConfig = {
     measurementId: process.env.FIREBASE_APP_MEASUREMENT_ID,
 };
 
-firebase.initializeApp(firebaseConfig);
-firebase.auth();
-firebase.analytics();
-
-export default {
-    firebaseConfig,
-};
+export { firebaseConfig }

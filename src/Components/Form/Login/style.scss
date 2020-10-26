@@ -1,0 +1,30 @@
+.login {
+    form {
+        box-shadow: none !important;
+        width: 60% !important;
+
+        input {
+            letter-spacing: 1px;
+            font-weight: normal;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: .5em !important;
+        }
+
+        img{
+            display: block;
+            width: 10em;
+            margin: auto;
+        }
+
+        .confirm{
+            text-align: center;
+        }
+
+        @media screen and (max-width: 768px) {
+            width: 90% !important;
+        }
+    }
+}

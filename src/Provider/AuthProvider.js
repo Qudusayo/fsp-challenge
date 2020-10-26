@@ -1,32 +1,48 @@
-import React, {useState} from "react";
-import { authMethods } from "./../firebase/authMethods";
+import React, { Component, createContext } from "react";
+import { firebase } from "./../firebase";
+export const { Provider, Consumer } = createContext();
 
-const AuthProvider = (props) => {
-    const [inputs, setInputs] = useState({ email: "", password: "" });
-    const [errors, setErrors] = useState([]);
-    const [token, setToken] = useState(null);
-
-    const handleSignup = () => {
-        // middle man between firebase and signup
-        console.log("handleSignup");
-        // calling signup from firebase server
-        return authMethods.signup(inputs.email, inputs.password,setErrors ,setToken )
-        console.log(errors, token)
+class AppProvider extends Component {
+    state = {
+        currentUser: AppProvider.defaultProps.currentUser,
+        message: AppProvider.defaultProps.message,
     };
 
-    return (
-        <firebaseAuth.Provider
-            value={{
-                //replaced test with handleSignup
-                handleSignup,
-                inputs,
-                setInputs,
-            }}
-        >
-            {props.children}
-        </firebaseAuth.Provider>
-    );
+    componentDidMount() {
+        firebase.auth.onAuthStateChanged(
+            (user) =>
+                user &&
+                this.setState({
+                    currentUser: user,
+                })
+        );
+    }
+
+    render() {
+        return (
+            <Provider
+                value={{
+                    state: this.state,
+                    destroySession: () =>
+                        this.setState({
+                            currentUser: AppProvider.defaultProps.currentUser,
+                        }),
+                    setMessage: (message) => this.setState({ message }),
+                    clearMessage: () =>
+                        this.setState({
+                            message: AppProvider.defaultProps.message,
+                        }),
+                }}
+            >
+                {this.props.children}
+            </Provider>
+        );
+    }
+}
+
+AppProvider.defaultProps = {
+    currentUser: null,
+    message: null,
 };
 
-export const firebaseAuth = React.createContext();
-export default AuthProvider;
+export default AppProvider;
