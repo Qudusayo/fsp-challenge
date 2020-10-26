@@ -1,95 +1,108 @@
-import React, { Component } from "react";
-import { Link } from 'react-router-dom'
-import axios from "axios";
-import './style.scss'
+import React, { useState } from "react";
+import { useFirebaseApp } from "reactfire";
+import "firebase/auth";
+import { Link } from "react-router-dom";
+import "./style.scss";
 
-import logo from "./../../../assets/logo.png"
+import logo from "./../../../assets/logo.png";
 import Navbar from "../../Navbar";
 
-class index extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            email: "",
-            password: "",
-            kinEmail: "",
-            errorMessages: [],
-        };
+function Index() {
+    // User State
+    const [user, setUser] = useState({
+        email: "",
+        password: "",
+        error: "",
+    });
+    const firebase = useFirebaseApp();
 
-        this.onChange = this.onChange.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
-    }
+    // onChange function
+    const handleChange = (e) => {
+        setUser({
+            ...user,
+            [e.target.name]: e.target.value,
+            error: "",
+        });
+    };
 
-    onChange(e) {
-        this.setState({ [e.target.name]: e.target.value });
-    }
-
-    onSubmit(e) {
+    // Submit function (Log in user)
+    const handleSubmit = (e) => {
         e.preventDefault();
-        const url = 'https://fsp-challenge.firebaseio.com/userdb.json';
-        console.log(url)
-        console.log(this.state);
-        axios
-            .post(url, { ...this.state })
-            .then((res) => res.json)
-            .then((data) => console.log(data))
-            .catch((err) => console.log(err));
-    }
+        // Log in code here.
+        firebase
+            .auth()
+            .signInWithEmailAndPassword(user.email, user.password)
+            .then((result) => {
+                if (!result.user.emailVerified) {
+                    setUser({
+                        ...user,
+                        error: "Please verify your email before to continue",
+                    });
+                    firebase.auth().signOut();
+                }
+            })
+            .catch((error) => {
+                // Update the error
+                setUser({
+                    ...user,
+                    error: error.message,
+                });
+            });
+    };
 
-    render() {
-        return (
-            <div className="Form login">
-                <Navbar />
-                <form onSubmit={this.onSubmit}>
-                    <img className="logo" src={logo} alt="logo" />
-                    <h2>Login to Dashboard</h2>
-                    <div className="flex">
-                        <div className="card">
-                            <p>
-                                Email <span className="red">*</span>
-                            </p>
-                            <input
-                                onChange={this.onChange}
-                                value={this.state.email}
-                                type="text"
-                                autoComplete="off"
-                                name="email"
-                                placeholder="freedomsynergypro@email.com"
-                                required
-                            />
-                        </div>
+    return (
+        <div className="Form login">
+            <Navbar />
+            <form onSubmit={handleSubmit}>
+                <img className="logo" src={logo} alt="logo" />
+                <h2>Login to Dashboard</h2>
+                <div className="flex">
+                    {user.error && <h4>{user.error}</h4>}
+                    <div className="card">
+                        <p>
+                            Email <span className="red">*</span>
+                        </p>
+                        <input
+                            onChange={handleChange}
+                            type="text"
+                            autoComplete="off"
+                            name="email"
+                            placeholder="freedomsynergypro@email.com"
+                            required
+                        />
                     </div>
-                    <div className="flex">
-                        <div className="card">
-                            <p>
-                                Email <span className="red">*</span>
-                            </p>
-                            <input
-                                onChange={this.onChange}
-                                value={this.state.password}
-                                type="password"
-                                autoComplete="off"
-                                name="password"
-                                placeholder="********"
-                                required
-                            />
-                        </div>
+                </div>
+                <div className="flex">
+                    <div className="card">
+                        <p>
+                            Password <span className="red">*</span>
+                        </p>
+                        <input
+                            onChange={handleChange}
+                            type="password"
+                            autoComplete="off"
+                            name="password"
+                            placeholder="********"
+                            required
+                        />
                     </div>
-                    <div className="card confirm">
-                            <span id="accept">
-                                <Link to="/recover-password">Forgot your Password ?</Link>
-                            </span>
-                    </div>
-                    <button type="submit" id="submit">
-                        LOGIN
-                    </button>
-                </form>
-                <footer>
-                    <span>&copy; FREEDOM SYNERGY PRO</span>
-                </footer>
-            </div>
-        );
-    }
+                </div>
+                <div className="card confirm">
+                    <span id="accept">
+                        <Link to="/recover-password">
+                            Forgot your Password ?
+                        </Link>
+                    </span>
+                </div>
+                <button type="submit" id="submit">
+                    LOGIN
+                </button>
+            </form>
+            <footer>
+                <span>&copy; FREEDOM SYNERGY PRO</span>
+            </footer>
+        </div>
+    );
 }
 
-export default index;
+export default Index;

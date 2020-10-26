@@ -1,16 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { FirebaseAppProvider } from "reactfire";
+import firebaseConfig from "./firebaseConfig";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.render(
-    <React.StrictMode>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
-    </React.StrictMode>,
+    <FirebaseAppProvider firebaseConfig={firebaseConfig}>
+        <React.StrictMode>
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
+        </React.StrictMode>
+    </FirebaseAppProvider>,
     document.getElementById("root")
 );
 
