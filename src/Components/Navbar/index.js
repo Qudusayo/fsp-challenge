@@ -6,7 +6,7 @@ import './style.scss'
 function index() {
     return (
         <div className="Navbar">
-            <div style={{display: 'flex', alignItems: 'center'}}><small><img src={logo} alt="logo" style={{width: '3em'}} /></small><b> FSP</b></div>
+            <div><small><img src={logo} alt="logo" style={{width: '3em'}} /></small></div>
             <nav>
                 <ul>
                     <li><NavLink activeClassName="active-link" to="/" exact>Home</NavLink></li>

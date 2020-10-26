@@ -14,9 +14,11 @@
         }
 
         img{
-            display: block;
-            width: 10em;
-            margin: auto;
+            display: block !important;
+            width: 10em !important;
+            margin: auto !important;
+            position: static !important;
+            opacity: 1 !important;
         }
 
         .confirm{
