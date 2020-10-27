@@ -7,7 +7,7 @@ import "./style.scss";
 import logo from "./../../../assets/logo.png";
 import Navbar from "../../Navbar";
 
-function Index() {
+function Index(props) {
     // User State
     const [user, setUser] = useState({
         email: "",
@@ -39,6 +39,8 @@ function Index() {
                         error: "Please verify your email before to continue",
                     });
                     firebase.auth().signOut();
+                } else {
+                    props.history.push("/dashboard");
                 }
             })
             .catch((error) => {
@@ -57,7 +59,6 @@ function Index() {
                 <img className="logo" src={logo} alt="logo" />
                 <h2>Login to Dashboard</h2>
                 <div className="flex">
-                    {user.error && <h4>{user.error}</h4>}
                     <div className="card">
                         <p>
                             Email <span className="red">*</span>
@@ -94,6 +95,7 @@ function Index() {
                         </Link>
                     </span>
                 </div>
+                {user.error && <h4>{user.error}</h4>}
                 <button type="submit" id="submit">
                     LOGIN
                 </button>

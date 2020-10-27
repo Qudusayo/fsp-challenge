@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
 import { FirebaseAppProvider } from "reactfire";
 import firebaseConfig from "./firebaseConfig";
@@ -9,11 +9,13 @@ import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.render(
     <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-        <React.StrictMode>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
-        </React.StrictMode>
+        <Suspense fallback={<h3>Loading...</h3>}>
+            <React.StrictMode>
+                <BrowserRouter>
+                    <App />
+                </BrowserRouter>
+            </React.StrictMode>
+        </Suspense>
     </FirebaseAppProvider>,
     document.getElementById("root")
 );
