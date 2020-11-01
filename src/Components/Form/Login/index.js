@@ -101,12 +101,8 @@ function Index(props) {
                     </span>
                 </div>
                 {user.error && <h4>{user.error}</h4>}
-                <button type="submit" id="submit">
-                    {user.spinner ? (
-                        spinner()
-                    ) : (
-                        "LOGIN"
-                    )}
+                <button type="submit" id="submit" disabled={user.spinner}>
+                    {user.spinner ? spinner() : "LOGIN"}
                 </button>
             </form>
             <footer>

@@ -25,6 +25,7 @@ function Index(props) {
         kinPhoneNumber: "",
         kinAddress: "",
         confirm: false,
+        spinner: false,
         error: "",
     });
     // Import firebase
@@ -42,13 +43,19 @@ function Index(props) {
     // Submit function (Create account)
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setUser({
+            ...user,
+            spinner: true,
+            error: "",
+        });
         // Sign up code here.
-        if(user.password !== user.confirmPassword){
+        if (user.password !== user.confirmPassword) {
             setUser({
                 ...user,
                 error: "Password mismatch",
+                spinner: false,
             });
-            return true
+            return true;
         }
 
         await firebase
@@ -67,22 +74,29 @@ function Index(props) {
                 result.user
                     .sendEmailVerification(myURL)
                     .then(() => {
-                        axios({ method: 'post', url: "https://fsp-challenge.firebaseio.com/user.json", data: user }).then(() => props.history.push("/login")).catch((error) => {
-                            setUser({
-                                ...user,
-                                error: error.message,
+                        axios({
+                            method: "post",
+                            url:
+                                "https://fsp-challenge.firebaseio.com/user.json",
+                            data: user,
+                        })
+                            .then(() => props.history.push("/login"))
+                            .catch((error) => {
+                                setUser({
+                                    ...user,
+                                    error: error.message,
+                                });
                             });
-                        });
                         setUser({
                             ...user,
                             verifyEmail: `Welcome ${user.userSurname}. To continue please verify your email.`,
                         });
-                        
                     })
                     .catch((error) => {
                         setUser({
                             ...user,
                             error: error.message,
+                            spinner: false,
                         });
                     });
 
@@ -94,6 +108,7 @@ function Index(props) {
                 setUser({
                     ...user,
                     error: error.message,
+                    spinner: false,
                 });
             });
     };
@@ -322,13 +337,23 @@ function Index(props) {
                     </label>
                 </div>
                 {user.error && <h4>{user.error}</h4>}
-                <button type="submit" id="submit">
-                    SUBMIT
+                <button type="submit" id="submit" disabled={user.spinner}>
+                    {user.spinner ? spinner() : "SUBMIT"}
                 </button>
             </form>
             <footer>
                 <span>&copy; FREEDOM SYNERGY PRO</span>
             </footer>
+        </div>
+    );
+}
+
+function spinner() {
+    return (
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
         </div>
     );
 }
