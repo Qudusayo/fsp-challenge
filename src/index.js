@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
 import { FirebaseAppProvider } from "reactfire";
 import firebaseConfig from "./firebaseConfig";
+import Preloader from "./preloader"
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
@@ -9,7 +10,7 @@ import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.render(
     <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-        <Suspense fallback={<h3>Loading...</h3>}>
+        <Suspense fallback={<Preloader />}>
             <React.StrictMode>
                 <BrowserRouter>
                     <App />

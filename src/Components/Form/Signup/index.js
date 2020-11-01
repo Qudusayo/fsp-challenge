@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { useFirebaseApp } from "reactfire";
+import axios from "axios";
 import "firebase/auth";
 import logo from "./../../../assets/logo.png";
 import "./style.scss";
 
-import Navbar from "../../Navbar";
-
-function Index() {
+function Index(props) {
     // User State
     const [user, setUser] = useState({
         package: "",
@@ -44,26 +43,41 @@ function Index() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         // Sign up code here.
+        if(user.password !== user.confirmPassword){
+            setUser({
+                ...user,
+                error: "Password mismatch",
+            });
+            return true
+        }
+
         await firebase
             .auth()
             .createUserWithEmailAndPassword(user.userEmail, user.password)
             .then((result) => {
                 // Update the nickname
                 result.user.updateProfile({
-                    displayName: user.userSurname,
+                    displayName: `${user.userSurname} ${user.userFirstName}`,
                 });
 
                 // URL of my website.
-                const myURL = { url: "fsp-challenge.vercel.app/" };
+                const myURL = { url: "http://fsp-challenge.vercel.app/login" };
 
                 // Send Email Verification and redirect to my website.
                 result.user
                     .sendEmailVerification(myURL)
                     .then(() => {
+                        axios({ method: 'post', url: "https://fsp-challenge.firebaseio.com/user.json", data: user }).then(() => props.history.push("/login")).catch((error) => {
+                            setUser({
+                                ...user,
+                                error: error.message,
+                            });
+                        });
                         setUser({
                             ...user,
                             verifyEmail: `Welcome ${user.userSurname}. To continue please verify your email.`,
                         });
+                        
                     })
                     .catch((error) => {
                         setUser({
@@ -86,7 +100,6 @@ function Index() {
 
     return (
         <div className="Form">
-            <Navbar />
             <form onSubmit={handleSubmit}>
                 <img src={logo} alt="logo" />
                 <h1>Create an account</h1>

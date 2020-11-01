@@ -1,0 +1,28 @@
+.App {
+    .card {
+        width: 85%;
+        margin: auto;
+        word-break: break-all;
+
+        button {
+            cursor: pointer;
+            display: block;
+            margin: 3em auto 1em;
+            border: none;
+            outline: none;
+            width: 100%;
+            background-color: #ff5722;
+            padding: 1em 0;
+            border-radius: 7px;
+            text-transform: uppercase;
+            font-weight: 700;
+            cursor: pointer;
+            color: #ffffff;
+            letter-spacing: 0.3em;
+
+            &:hover {
+                background-color: lighten($color: #ff5722, $amount: 10%);
+            }
+        }
+    }
+}

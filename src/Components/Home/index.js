@@ -1,12 +1,10 @@
 import React from "react";
-import Navbar from "./../Navbar";
-import "./style.scss";
+import styles from "./style.module.scss";
 
 function App(props) {
     return (
         <>
-            <Navbar />
-            <div className="App"></div>
+            <div className={styles.App}></div>
         </>
     );
 }

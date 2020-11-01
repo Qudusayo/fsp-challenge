@@ -30,12 +30,20 @@ function Index() {
                     </li>
                     {user ? (
                         <>
-                            <li>
+                        <li>
                                 <NavLink
                                     activeClassName="active-link"
                                     to="/dashboard"
                                 >
                                     Dashboard
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink
+                                    activeClassName="active-link"
+                                    to="/investment"
+                                >
+                                    Invest
                                 </NavLink>
                             </li>
                             <li>

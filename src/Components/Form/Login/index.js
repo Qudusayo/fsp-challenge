@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import "./style.scss";
 
 import logo from "./../../../assets/logo.png";
-import Navbar from "../../Navbar";
 
 function Index(props) {
     // User State
@@ -13,6 +12,7 @@ function Index(props) {
         email: "",
         password: "",
         error: "",
+        spinner: false,
     });
     const firebase = useFirebaseApp();
 
@@ -28,6 +28,11 @@ function Index(props) {
     // Submit function (Log in user)
     const handleSubmit = (e) => {
         e.preventDefault();
+        setUser({
+            ...user,
+            spinner: true,
+            error: "",
+        });
         // Log in code here.
         firebase
             .auth()
@@ -48,13 +53,13 @@ function Index(props) {
                 setUser({
                     ...user,
                     error: error.message,
+                    spinner: false,
                 });
             });
     };
 
     return (
         <div className="Form login">
-            <Navbar />
             <form onSubmit={handleSubmit}>
                 <img className="logo" src={logo} alt="logo" />
                 <h2>Login to Dashboard</h2>
@@ -97,12 +102,26 @@ function Index(props) {
                 </div>
                 {user.error && <h4>{user.error}</h4>}
                 <button type="submit" id="submit">
-                    LOGIN
+                    {user.spinner ? (
+                        spinner()
+                    ) : (
+                        "LOGIN"
+                    )}
                 </button>
             </form>
             <footer>
                 <span>&copy; FREEDOM SYNERGY PRO</span>
             </footer>
+        </div>
+    );
+}
+
+function spinner() {
+    return (
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
         </div>
     );
 }
